@@ -19,10 +19,7 @@
   .wrap{max-width:560px;margin:0 auto;padding:22px 16px 40px}
 
   header{padding:4px 4px 14px}
-  .eyebrow{display:inline-block;font-size:12px;letter-spacing:.08em;color:var(--green);
-    background:#e3ece5;border-radius:999px;padding:3px 10px;margin-bottom:10px}
-  h1{font-size:26px;margin:0 0 4px;letter-spacing:.02em}
-  .sub{margin:0;color:var(--muted);font-size:14px}
+  h1{font-size:26px;margin:0;letter-spacing:.02em}
 
   /* ---------- radar map ---------- */
   .map{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;
@@ -75,16 +72,14 @@
   .meta{flex:1;min-width:0}
   .meta b{display:block;font-size:15.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .row{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:12.5px;color:var(--muted)}
-  .dist{flex:none;text-align:right;font-size:12px;color:var(--muted)}
-  .dist strong{display:block;font-size:16px;color:var(--c)}
+  .cuisine{display:block;font-size:13.5px;font-weight:600;color:var(--c);margin:1px 0 4px}
+  .dist{flex:none;align-self:flex-start;margin-top:4px;font-size:12px;color:var(--muted);white-space:nowrap}
 
   .stars{position:relative;display:inline-block;font-size:13px;letter-spacing:1px;color:#e4dccf;line-height:1}
   .stars::before{content:"★★★★★"}
   .stars span{position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap;color:var(--star)}
   .stars span::before{content:"★★★★★"}
   .score{color:#e2762b;font-weight:700}
-
-  footer{margin-top:22px;text-align:center;font-size:12px;color:#a89d8f}
 
   /* ---------- bottom sheet ---------- */
   .mask{position:fixed;inset:0;background:rgba(30,24,18,.45);opacity:0;pointer-events:none;transition:opacity .25s;z-index:10}
@@ -123,9 +118,7 @@
 <body>
 <div class="wrap">
   <header>
-    <span class="eyebrow">第二十一届青教赛 · 聚餐</span>
     <h1>聚餐候选餐厅</h1>
-    <p class="sub">以北京林业大学为中心 · 共 5 家</p>
   </header>
 
   <div class="map" id="map">
@@ -146,8 +139,6 @@
 
   <h2>按距离排序</h2>
   <div class="list" id="list"></div>
-
-  <footer>距离为北林到各店的直线距离估算，仅供参考</footer>
 </div>
 
 <div class="viewer" id="viewer"><img alt="大图"><span>点击任意处关闭 · 可左右滑动 / 双指缩放</span></div>
@@ -174,28 +165,24 @@ const SHOPS = [
   {id:'annie', short:'安妮意大利餐厅', name:'安妮意大利餐厅(清华大学店)', rating:4.9, area:'五道口', cuisine:'意大利菜',
    addr:'双清路88号华源世纪商务楼3楼310室（临近清华大学东南门）', lat:39.9970, lng:116.3378, color:'#e0762c', side:'b',
    url:'https://m.dianping.com/shopinfo/k2AQCLMZPUk0xYCo?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=232&cityid=2&isoversea=0'},
-  {id:'jiugui', short:'酒鬼金居酒屋', name:'酒鬼金居酒屋のんべい(学清路店)', rating:4.8, area:'五道口', cuisine:'日本料理',
+  {id:'jiugui', short:'酒鬼金居酒屋', name:'酒鬼金居酒屋のんべい(学清路店)', rating:4.8, area:'五道口', cuisine:'日本料理·居酒屋',
    addr:'学清路8号科技财富中心A座一层A103C', lat:40.0168, lng:116.3554, color:'#6a4fc8', side:'r',
    url:'https://m.dianping.com/shopinfo/G1ibuoenXYL4vhJw?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=224&cityid=2&isoversea=0'},
-  {id:'cenfu', short:'岑府私厨', name:'岑府私厨·烤鸭·淮扬菜·粤菜(学清路店)', rating:4.7, area:'五道口', cuisine:'私房菜',
+  {id:'cenfu', short:'岑府私厨', name:'岑府私厨·烤鸭·淮扬菜·粤菜(学清路店)', rating:4.7, area:'五道口', cuisine:'烤鸭·淮扬菜·粤菜',
    addr:'学清路10号院学清嘉创大厦A座3层（近中国农业大学、北京林业大学）', lat:40.0125, lng:116.3552, color:'#b5862a', side:'l',
    url:'https://m.dianping.com/shopinfo/k7IMlt5CNT8IrVFM?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=1338&cityid=2&isoversea=0'},
   {id:'yixi', short:'伊喜·悦宴', name:'伊喜·悦宴(五道口学院路店)', rating:4.8, area:'五道口', cuisine:'苏浙菜',
    addr:'科大天工大厦A座（地铁昌平线学院桥站C1口）', lat:39.9890, lng:116.3540, color:'#168a8a', side:'r',
    url:'https://m.dianping.com/shopinfo/G6iIkWY07H42PFZd?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=34257&cityid=2&isoversea=0'},
-  {id:'xiaoxiang', short:'潇湘楼', name:'潇湘楼·二十四节气山野菜(亚运村店)', rating:4.8, area:'北沙滩', cuisine:'湘菜',
+  {id:'xiaoxiang', short:'潇湘楼', name:'潇湘楼·二十四节气山野菜(亚运村店)', rating:4.8, area:'北沙滩', cuisine:'湘菜·二十四节气山野菜',
    addr:'大屯路北沙滩1号院33号楼1幢1层部分、2层部分', lat:40.0028, lng:116.3725, color:'#c63b4b', side:'b',
    url:'https://m.dianping.com/shopinfo/E4YHIwXEc4p3Hvgj?msource=Appshare2021&utm_source=shop_share&shoptype=10&shopcategoryid=104&cityid=2&isoversea=0'},
 ];
 
-const DIRS = ['正北','东北偏北','东北','东北偏东','正东','东南偏东','东南','东南偏南',
-              '正南','西南偏南','西南','西南偏西','正西','西北偏西','西北','西北偏北'];
 const kx = 111.32*Math.cos(CENTER.lat*Math.PI/180), ky = 110.95;
 SHOPS.forEach(s=>{
   s.dx = (s.lng-CENTER.lng)*kx; s.dy = (s.lat-CENTER.lat)*ky;
   s.km = Math.hypot(s.dx,s.dy);
-  const deg = (Math.atan2(s.dx,s.dy)*180/Math.PI+360)%360;
-  s.dir = DIRS[Math.round(deg/22.5)%16];
 });
 SHOPS.sort((a,b)=>a.km-b.km);
 SHOPS.forEach((s,i)=>s.no=i+1);
@@ -227,8 +214,9 @@ SHOPS.forEach(s=>{
   c.className='item'; c.id='it-'+s.id; c.style.setProperty('--c',s.color);
   c.innerHTML=`<span class="num">${s.no}</span>
     <span class="meta"><b>${s.short}</b>
-      <span class="row">${stars(s.rating)}<span class="score">${s.rating}</span><span>${s.area} · ${s.cuisine}</span></span></span>
-    <span class="dist"><strong>${s.km.toFixed(1)}</strong>km · ${s.dir}</span>`;
+      <span class="cuisine">${s.cuisine}</span>
+      <span class="row">${stars(s.rating)}<span class="score">${s.rating}</span></span></span>
+    <span class="dist">${s.km.toFixed(1)} km</span>`;
   c.onclick=()=>open(s); list.appendChild(c);
 });
 
@@ -246,7 +234,7 @@ function open(s){
     <div class="s-tags">
       <span class="chip">${stars(s.rating)} <span class="score">${s.rating}</span></span>
       <span class="chip c">${s.cuisine}</span><span class="chip">${s.area}</span>
-      <span class="chip">距北林${fmt(s.km)} · ${s.dir}</span>
+      <span class="chip">距北林${fmt(s.km)}</span>
     </div>
     <button class="shot" onclick="zoomIn('${s.id}')"><img src="${src(s.id)}" alt="${s.short}店铺信息与推荐菜"></button>
     <div class="zoom">点击图片可查看大图</div>
